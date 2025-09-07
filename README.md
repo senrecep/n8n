@@ -1,6 +1,6 @@
 # n8n with FFmpeg Dockerized Setup
 
-This project provides a ready-to-use Docker Compose setup for running [n8n](https://n8n.io/) with FFmpeg support. It is designed for scalable, production-grade automation workflows, with environment-based configuration and multi-worker support.
+This project provides a ready-to-use Docker Compose setup for running [n8n](https://n8n.io/) with FFmpeg support. It is designed for scalable, production-grade automation workflows, with environment-based configuration and multi-worker support. The setup now uses a prebuilt public Docker image from Docker Hub: [`recepsen/n8n-ffmpeg`](https://hub.docker.com/r/recepsen/n8n-ffmpeg).
 
 ## Features
 
@@ -12,10 +12,10 @@ This project provides a ready-to-use Docker Compose setup for running [n8n](http
 
 ## Project Structure
 
-- `Dockerfile`: Extends the official n8n image and installs FFmpeg
-- `docker-compose.yaml`: Defines services, environment, and scaling
-- `install.sh`: Helper script to set up Docker network, volumes, and start services
+- `docker-compose.yaml`: Defines services, environment, and scaling (uses `recepsen/n8n-ffmpeg` image)
 - `.env`: Centralized environment configuration for n8n and related services
+- `install.sh`: Helper script to set up Docker network, volumes, and start services
+- `Dockerfile`: (Optional) If you want to build your own custom image
 
 ## Quick Start
 
@@ -31,8 +31,11 @@ This project provides a ready-to-use Docker Compose setup for running [n8n](http
    This will:
 
    - Create a Docker network and volume
-   - Build the custom n8n image with FFmpeg
-   - Start the services with Docker Compose
+   - Start the services with Docker Compose using the public image `recepsen/n8n-ffmpeg`
+
+**Optional: Build your own image**
+
+If you want to customize the image (e.g., add more dependencies), edit the `Dockerfile` and build/push your own image. Then update `docker-compose.yaml` to use your image name.
 
 ## Main Environment Variables
 
@@ -60,9 +63,9 @@ docker compose up -d --scale n8n-worker=3
 
 ## Useful Commands
 
-- Build images: `docker-compose build --no-cache`
 - Start services: `docker compose up -d`
 - Stop services: `docker compose down`
+- (Optional) Build images: `docker-compose build --no-cache` (only if you want to build locally)
 
 ## License
 

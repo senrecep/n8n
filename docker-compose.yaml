@@ -1,9 +1,6 @@
 services:
   n8n-server:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: n8n-with-ffmpeg
+    image: recepsen/n8n-ffmpeg
     restart: unless-stopped
     container_name: n8n-server
     ports:
@@ -53,10 +50,7 @@ services:
       - n8n-network
 
   n8n-worker:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: n8n-with-ffmpeg
+    image: recepsen/n8n-ffmpeg
     restart: unless-stopped
     command: worker
     environment:
