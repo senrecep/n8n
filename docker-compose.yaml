@@ -1,6 +1,6 @@
 services:
   n8n-server:
-    image: recepsen/n8n-ffmpeg
+    image: recepsen/n8n-ffmpeg:latest
     restart: unless-stopped
     container_name: n8n-server
     ports:
@@ -30,6 +30,9 @@ services:
       - N8N_PAYLOAD_SIZE_MAX=${N8N_PAYLOAD_SIZE_MAX}
       - N8N_FORMDATA_FILE_SIZE_MAX=${N8N_FORMDATA_FILE_SIZE_MAX}
       - N8N_COMMUNITY_PACKAGES_ENABLED=${N8N_COMMUNITY_PACKAGES_ENABLED}
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=${N8N_BLOCK_ENV_ACCESS_IN_NODE}
+      - N8N_GIT_NODE_DISABLE_BARE_REPOS=${N8N_GIT_NODE_DISABLE_BARE_REPOS}
+      - N8N_REVERSE_PROXY=${N8N_REVERSE_PROXY}
       - EXECUTIONS_MODE=${EXECUTIONS_MODE}
       - QUEUE_BULL_REDIS_DB=${QUEUE_BULL_REDIS_DB}
       - QUEUE_BULL_REDIS_HOST=${QUEUE_BULL_REDIS_HOST}
@@ -47,10 +50,12 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
     networks:
-      - n8n-network
+      - dokploy-network
+    labels:
+      - traefik.enable=true
 
   n8n-worker:
-    image: recepsen/n8n-ffmpeg
+    image: recepsen/n8n-ffmpeg:latest
     restart: unless-stopped
     command: worker
     environment:
@@ -78,6 +83,9 @@ services:
       - N8N_PAYLOAD_SIZE_MAX=${N8N_PAYLOAD_SIZE_MAX}
       - N8N_FORMDATA_FILE_SIZE_MAX=${N8N_FORMDATA_FILE_SIZE_MAX}
       - N8N_COMMUNITY_PACKAGES_ENABLED=${N8N_COMMUNITY_PACKAGES_ENABLED}
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=${N8N_BLOCK_ENV_ACCESS_IN_NODE}
+      - N8N_GIT_NODE_DISABLE_BARE_REPOS=${N8N_GIT_NODE_DISABLE_BARE_REPOS}
+      - N8N_REVERSE_PROXY=${N8N_REVERSE_PROXY}
       - QUEUE_BULL_REDIS_DB=${QUEUE_BULL_REDIS_DB}
       - QUEUE_BULL_REDIS_HOST=${QUEUE_BULL_REDIS_HOST}
       - QUEUE_BULL_REDIS_PASSWORD=${QUEUE_BULL_REDIS_PASSWORD}
@@ -95,12 +103,13 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
     networks:
-      - n8n-network
+      - dokploy-network
+    labels:
+      - traefik.enable=true
 
 volumes:
   n8n_data:
-    external: true
 
 networks:
-  n8n-network:
+  dokploy-network:
     external: true
